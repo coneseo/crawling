@@ -13,4 +13,3 @@ def upload_csv_file(df, file_name):
     s3_resource = boto3.resource('s3')
     s3_resource.Object(bucket, file_name).put(Body=csv_buffer.getvalue())
 
-

@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import os
 import xmltodict
+from upload_file_to_s3 import upload_csv_file
 
 # petdoc_id = 1059558618
 # https://itunes.apple.com/kr/rss/customerreviews/page=10/id=1059558618/xml
@@ -85,20 +86,22 @@ def appstore_crawler():
         import datetime
         today = datetime.datetime.today().date()
         today_str = str(today)
-        outfile = './appstore_review_%s.xlsx' % today_str
+        file_name = 'appstore_review_%s.csv' % today_str
+        upload_csv_file(res_df, file_name)
+        # outfile = './appstore_review_%s.xlsx' % today_str
         # res_df.to_csv(outfile, encoding='utf-8-sig', index=False)
-        res_df.to_excel(outfile, sheet_name='Sheet1',
-                        na_rep='NaN',
-                        float_format="%.2f",
-                        header=True,
-                        index=True,
-                        index_label="id",
-                        startrow=1,
-                        startcol=1,
-                        freeze_panes=(2, 0)
-                        )
+        # s3_file_name = 's3://personalization_log/appstore_review_%s.xlsx' % today_str
+        # res_df.to_excel(s3_file_name, sheet_name='Sheet1',
+        #                 na_rep='NaN',
+        #                 float_format="%.2f",
+        #                 header=True,
+        #                 index=True,
+        #                 index_label="id",
+        #                 startrow=1,
+        #                 startcol=1,
+        #                 freeze_panes=(2, 0)
+        #                 )
 
 
 if __name__ == '__main__':
-    # print(get_url_index())
     appstore_crawler()
